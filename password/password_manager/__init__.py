@@ -1,1 +1,0 @@
-"""Secure Password Manager package."""
