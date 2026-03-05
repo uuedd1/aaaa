@@ -1,0 +1,670 @@
+
+
+===== PAGE 1 =====
+Computer Science Higher Level 
+Internal Assessment 
+Topic: Secure Password Manager 
+May 2026 
+Candidate Number:  
+Word Count: 1926 
+ 
+
+===== PAGE 2 =====
+Criterion A 
+The Scenario 
+My client, Mark is a friend of mine who uses a wide range of online service everyday, such 
+as email, banking, shopping and social media. During our initial conversation, Mark 
+explained to me that he currently manages over 30 accounts and is reusing the same 
+password across all accounts. Mark acknowledged that this approach is very insecure and 
+risky telling me that he received a notification last year that his email credentials appeared 
+in a data breach. I asked him whether he had ever considered using an existing password 
+manager such as NordPass or 1Password, but he told me that he does not trust third party 
+companies to store his confidential data, and that these password managers are 
+overwhelmingly complex for him. 
+Rationale for the Proposed Product 
+I had a 30 minute call with Mark and I proposed developing a secure password manager for 
+him, built in python that stores all credentials locally on his device, which directly 
+addresses his concern about trusting third party companies to store his sensitive data. 
+Every stored password will be encrypted using Fernet symmetric encryption, which uses 
+AES-128-CBC for confidentiality and HMAC-SHA256 for message auth. The main vault will 
+be protected with a single master password which will be processed through PBKDF2-
+HMAC-SHA256 key derivation with 200,000 iterations and a unique 16-byte random salt 
+generated with Python’s secret module, it will ensure that even if the database file is 
+copied, the contents of it will remain unreadable without the master password. 
+The product will have three features that make it better than any basic vault. A custom built 
+password strength analyzer will calculate entropy and apply penalties for detected 
+patterns like sequential characters, repeated blocks, keyboard walks, low character 
+uniqueness, and common password matches, which will produce an accurate rating. A 
+breach detection feature will check passwords against the Have I Been Pwned API using k-
+anonymity, it will transmit only the first five characters of a SHA-1 hash so the full 
+password never leaves the device. A secure password generator using Python’s secrets 
+module will produce cryptographically random passwords with configurable character 
+types. 
+I selected python because of its mature cryptography ecosystem, native SQLite3 support 
+for local storage, and compatibility with CustomTkinter for a desktop GUI. After discussing 
+interface preferences with the client, we agreed upon a dark themed application with color 
+coded strength indicators and minimal navigation would suit Mark’s need for simplicity. 
+The combination of a custom algorithm, an external API, and symmetric encryption with 
+
+===== PAGE 3 =====
+key derivation, a relational database, and a GUI framework ensured that the product uses 
+multiple technologies. 
+Success Criteria 
+After consultation with the client, the following success criteria were developed: 
+1. The system has to allow the client to store, retrieve, edit, and delete passwords with 
+all passwords encrypted via Fernet before being written to a local SQLite database. 
+2. The system has to require a master password at launch, verified using PBKDF2-
+HMAC-SHA256 with a unique random salt, and it has to temporarily lock the vault 
+for 120 seconds after three consecutive failed login attempts. 
+3. The system has to include a custom built strength analyzer that rates password on a 
+scale from Weak, Moderate, Strong to Very Strong based on calculated entropy with 
+penalties for sequential characters, repeated characters, repeated block patterns, 
+keyboard walks, low character uniqueness and common password matches. 
+4. The system has to generate cryptographically secure random passwords (from 8 to 
+64 characters) using Python’s secrets library, and allow one click copying to the 
+clipboard with auto clear after 30 seconds. 
+5. The system has to check passwords against the Have I Been Pwned API using k-
+anonymity, support both individual and vault-wide batch checks, and display 
+breach counts for any compromised passwords. 
+6. The system has to support real time search by service name, username, or 
+category, filtering by category, and sorting by service name, category, or date 
+added, returning results in under two seconds. 
+7. The GUI has to be intuitive enough for the client to store, retrieve, generate, and 
+breach check passwords without any technical assistance. 
+ 
+Criterion B  
+Record of Tasks 
+ Stage Planned Action Planned Outcome Tim
+e 
+Criterio
+n 
+1 Planning Conduct initial 
+client interview to 
+identify password 
+management 
+problems and 
+requirements. 
+Clear problem statement, 
+list of client needs, and 
+agreed project scope. 
+1h A 
+
+===== PAGE 4 =====
+2 Planning Research 
+encryption 
+standards 
+(Fernet/AES-128-
+CBC, PBKDF2), the 
+HIBP API k-
+anonymity model, 
+and CustomTkinter 
+capabilities. 
+Technical feasibility 
+confirmed; technology 
+stack selected and 
+justified. 
+2h A 
+3 Planning Draft Criterion A: 
+scenario with 
+consultation 
+evidence, rationale 
+with technical 
+justification, and 
+seven measurable 
+success criteria. 
+Completed Criterion A 
+document aligned with top 
+mark band descriptors. 
+1h A 
+4 Design Create UML class 
+diagram showing all 
+thirteen classes 
+(backend and GUI), 
+their attributes, 
+methods, and 
+relationships. 
+Complete class diagram 
+reflecting the modular 
+OOP architecture. 
+1h B 
+5 Design 
+ 
+Design ER diagram 
+for SQLite database 
+schema (config and 
+entries tables). 
+ER diagram with field 
+types, primary keys, and 
+constraints documented 
+1h B 
+6 Design 
+ 
+Produce annotated 
+wireframes for all 
+four GUI screens: 
+login, dashboard, 
+add/edit entry, 
+generator dialog 
+Wireframes with 
+annotation callouts 
+explaining interactive 
+behaviours. 
+2h B 
+7 Design 
+ 
+Write pseudocode 
+for the custom 
+password strength 
+analyser algorithm 
+(entropy + penalty 
+system). 
+Pseudocode clearly 
+showing the algorithmic 
+logic for SC3. 
+1h B 
+8 Design 
+ 
+Create outline test 
+plan mapping each 
+success criterion to 
+Complete test plan table 
+ready for use during 
+testing phase. 
+1.5h B 
+
+===== PAGE 5 =====
+specific test cases 
+with normal, 
+boundary, and 
+erroneous inputs. 
+9 Development Implement 
+MasterAuth class: 
+PBKDF2-HMAC-
+SHA256 key 
+derivation (200,000 
+iterations, 16-byte 
+salt), master 
+password 
+setup/verification, 
+failed attempt 
+tracking with 120-
+second lockout. 
+Working authentication 
+module passing all SC2 
+test cases. 
+2.5h C 
+1
+0 
+Development 
+ 
+Implement 
+EncryptionManager 
+class: Fernet-based 
+encrypt/decrypt 
+methods for vault 
+password fields. 
+Passwords encrypted 
+before database writes 
+and decrypted on retrieval. 
+1h C 
+1
+1 
+Development 
+ 
+Implement Vault 
+class with 
+PasswordEntry 
+dataclass: CRUD 
+operations on 
+SQLite with 
+parameterised 
+queries, 
+search/filter/sort 
+functionality. 
+Full data layer supporting 
+SC1 and SC6 
+requirements. 
+2.5h C 
+1
+2 
+Development 
+ 
+Implement 
+StrengthAnalyser 
+class: entropy 
+calculation, eight 
+penalty checks 
+(short length, 
+sequential, 
+repeated, repeated 
+blocks, keyboard 
+walks, low 
+uniqueness, 
+common 
+Custom algorithm 
+producing accurate 
+Weak/Moderate/Strong/Ve
+ry Strong ratings for SC3. 
+3h C 
+
+===== PAGE 6 =====
+passwords, 
+dictionary words), 
+rating system with 
+post-rating 
+overrides, 
+improvement 
+suggestions. 
+1
+3 
+Development 
+ 
+Implement 
+PasswordGenerator 
+class: secrets-
+based generation, 
+configurable length 
+(8–64) and 
+character types, 
+Fisher-Yates 
+shuffle, guaranteed 
+type inclusion. 
+Cryptographically secure 
+generator passing SC4 test 
+cases. 
+1h C 
+1
+4 
+Development 
+ 
+Implement 
+BreachChecker 
+class: SHA-1 
+hashing, k-
+anonymity API call 
+(first 5 hex chars), 
+single and batch 
+checking, error 
+handling for 
+timeouts 
+HIBP integration working 
+for SC5 with graceful 
+offline handling 
+1.5h C 
+1
+5 
+Development 
+ 
+Build all GUI 
+screens with 
+CustomTkinter: 
+LoginFrame, 
+DashboardFrame, 
+EntryFormFrame, 
+GeneratorDialog, 
+BreachResultsFram
+e. Implement real-
+time strength bar, 
+clipboard auto-clear 
+(30 s), and category 
+filter/sort controls. 
+Complete GUI matching 
+wireframe designs and 
+supporting SC7. 
+4h C 
+1
+6 
+Testing Execute all test 
+cases from the 
+outline test plan: 
+normal, boundary, 
+All test results recorded; 
+bugs identified and logged. 
+2h B, C 
+
+===== PAGE 7 =====
+and erroneous 
+inputs for each 
+success criterion. 
+1
+7 
+Testing 
+ 
+Fix identified bugs, 
+re-test failed cases, 
+and conduct 
+regression testing. 
+All seven success criteria 
+passing with documented 
+evidence. 
+2h C 
+1
+8 
+Testing 
+ 
+Conduct client 
+usability testing 
+session: client 
+performs key tasks 
+independently while 
+observations are 
+recorded. 
+Client feedback collected 
+for SC7 evaluation and 
+Criterion E. 
+1h E 
+1
+9 
+Implementatio
+n 
+Record Criterion D 
+demonstration 
+video: walk through 
+each success 
+criterion with real 
+data in the vault. 
+Video (2–7 minutes) 
+showing comprehensive 
+functionality. 
+0.5h D 
+2
+0 
+Implementatio
+n 
+Write Criterion E 
+evaluation: assess 
+each SC against test 
+results and client 
+feedback, propose 
+realistic 
+recommendations. 
+Completed evaluation 
+with client quotes and 
+extension suggestions. 
+1h E 
+ 
+Design Overview 
+UML Class Diagram 
+The diagram shows all thirteen classes with their attributes, methods, and inter class 
+relationships. Backend logic classes (MasterAuth, EncryptionManager, PasswordEntry, 
+Vault, StrengthAnalyser, PasswordGenerator, BreachChecker) are separated from the GUI 
+classes (App, LoginFrame, DashboardFrame, EntryFormFrame, GeneratorDialog, 
+BreachResultsFrame), with the app controller between interactions. 
+
+===== PAGE 8 =====
+ 
+Entity Relationship Diagram 
+The SQLite databse has two tables: config (master has, salt, failed attempts, lockout 
+timestamp) and entries (password records encrypted with fernets and categories) 
+ 
+ 
+Annotated Wireframes 
+Red annotations explain the backend processes triggered by each GUI element 
+ 
+
+
+===== PAGE 9 =====
+ 
+
+
+===== PAGE 10 =====
+ 
+
+
+===== PAGE 11 =====
+ 
+Pseudocode: Password Strength Analyser 
+The pseudocode below describes the core algorithm in the StrengthAnalyser class (SC3). It 
+calculates raw entropy, applies eight independent penalty checks, computes effective 
+entropy, maps the results to a four tier rating, and applies post rating safety overrides for 
+edge cases. 
+
+
+===== PAGE 12 =====
+ 
+
+
+===== PAGE 13 =====
+Criterion C  
+The secure password manager integrates six programming techniques across thirteen 
+class OOP architecture. Each technique adresses a specific aspect of the client’s 
+requirements. I will demonstrate below snippets from my codes from the working 
+application, explaining what each techniques achieves and why it was chosen. 
+Technique 1: OOP Architecture with Dependency Injection 
+The App class is the main controller. It creates all four backend services (MasterAuth, 
+StrengthAnalyser, PasswordGenerator, BreachChecker) once when the program starts, 
+then passes them to GUI frames as needed. This means GUI classes never import backend 
+modules directly. The EncryptionManager and Vault are set to None until the user enters 
+the correct master password, so no encrypted data can be read before login. 
+
+
+===== PAGE 14 =====
+ 
+This null-until-authenticated pattern stops the program from accidentally reading plaintext 
+passwords before the user logs in. The three Optional frame references let the controller 
+manage screen navigation and form state without the GUI classes needing to know about 
+each other. The INACTIVITY_TIMEOUT_MS constant and the two bind_all calls set up a 
+timer that locks the vault after five minutes of no input. 
+Technique 2: PBKDF2 Key Derivation and Constant Time Auth 
+Hashing a master password with plain SHA-256 is not secure because modern GPUs can 
+test billions of hashes per second. PBKDF2-HMAC-SHA256 with 200,000 iterations makes 
+each guess much slower, which makes brute-force attacks far more expensive. A random 
+
+
+===== PAGE 15 =====
+16-byte salt from secrets.token_bytes means that even if two users pick the same master 
+password, their stored hashes will be different. 
+ 
+ 
+
+
+===== PAGE 16 =====
+The 32-byte key material has two uses: its SHA-256 hash is saved for future password 
+checks, and on a successful login, the raw bytes are base64-encoded into a Fernet key 
+that sets up the EncryptionManager. The try/except block catches cases where the stored 
+salt is damaged, returning a clear error instead of crashing. Verification uses 
+secrets.compare_digest, which always takes the same amount of time regardless of how 
+many characters match, preventing timing attacks. If the user fails three times, 
+_record_failed_attempt triggers a 120-second lockout, and the two different return paths 
+tell the user whether the password was wrong or the account is locked. 
+Technique 3: Custom Entropy Algorithm with Penalty System 
+The StrengthAnalyser is the most complex class in the project. Instead of using a third-
+party library, it calculates raw entropy using the formula length × log₂(pool_size), then 
+subtracts penalties for nine weakness patterns: short length (−5), common-password 
+match (−35), dictionary word (−18), sequential characters (−12), repeated characters (−10), 
+repeated blocks (−30), low unique count (−45 or −25), low unique ratio (−20), and keyboard 
+walks (−12). On top of this, hard overrides force any common-password match to Weak 
+regardless of its entropy score, and passwords with only one or two unique characters are 
+also clamped to Weak. The final score maps to four bands: Weak (<28), Moderate (28–50), 
+Strong (50–70), and Very Strong (>70). 
+
+===== PAGE 17 =====
+ 
+
+
+===== PAGE 18 =====
+ 
+Each penalty targets a different type of attack. The common-password check 
+(_is_common_password) does an exact lookup against a local set of known weak 
+passwords loaded from a text file. The dictionary check (_contains_dictionary_word) scans 
+the password for embedded words like “password” or “football” using simple substring 
+matching. The sequential detector (_contains_sequential_pattern) slides a three-character 
+window across the password and checks whether the ASCII codes step up or down by one, 
+catching runs like abc or 321. The keyboard-walk detector (_contains_keyboard_walk) 
+checks whether any three consecutive characters appear in the same row of a QWERTY 
+keyboard, flagging patterns like qwe or asd. The repeated-block detector 
+(_contains_repeated_block_pattern) tries every possible block length up to half the 
+
+
+===== PAGE 19 =====
+password, rebuilds the full string from that block, and compares it to the original, catching 
+patterns like abcabc or 121212. Finally, the unique-ratio and unique-count checks handle 
+cases where the password uses very few distinct characters, even if it is long. 
+Technique 4: Privacy Preserving Breach Detection with k-anonymity API 
+The BreachChecker calls the Have I Been Pwned API without sending the full password or 
+its full hash. It only sends the first five characters of the SHA-1 hash as a URL parameter. 
+The API sends back all hash suffixes that share that prefix, along with how many times 
+each one appeared in known breaches. The method then checks locally whether the 
+remaining suffix matches. 
+ 
+
+
+===== PAGE 20 =====
+This k-anonymity model means the API operator never learns which exact password is 
+being checked. An empty-password guard at the top returns immediately with a clear error. 
+Every return path uses the same four-key dictionary (checked, breach_count, 
+is_compromised, error), so the calling code can always read results the same way without 
+checking which keys exist. The method handles timeouts and network errors separately, 
+with different messages so the user knows what went wrong. The matching loop sets 
+breach_count to zero by default, then breaks as soon as it finds a match, so passwords not 
+in the list are correctly reported as safe. 
+Technique 5: Cryptographically secure password generation 
+The PasswordGenerator uses the secrets module instead of random, because random 
+uses a Mersenne Twister PRNG that is predictable and not safe for security use. Three 
+validation checks protect against bad input: length must be between 8 and 64, at least one 
+character type must be selected, and the length must be long enough to include one 
+character from each type. 
+
+===== PAGE 21 =====
+ 
+The method builds the password in two steps. First, it picks one random character from 
+each selected pool using secrets.choice, which guarantees that every chosen type 
+appears at least once. Then it fills the rest from the combined pool. The Fisher-Yates 
+shuffle, powered by secrets.randbelow, randomly reorders all the characters so an 
+attacker cannot guess that the first few characters come from specific pools. The shuffle is 
+in its own _secure_shuffle method so it can be tested on its own. 
+Technique 6: Event driven GUI with real time callbacks 
+ 
+
+
+===== PAGE 22 =====
+The GUI uses four event-driven patterns to keep the interface responsive without manual 
+refresh buttons. The dashboard uses trace_add("write") to run the search callback every 
+time a character is typed, instantly filtering the entry list. The entry form binds 
+<KeyRelease> to update the strength bar and entropy display as the user types. The 
+clipboard auto-clear uses Tkinter’s after() method to schedule a clear 30 seconds after 
+copying, and it cancels any previous job first so old callbacks do not fire. The inactivity lock 
+binds all key and mouse events to a timer that calls lock_vault after five minutes of no 
+activity. 
+ 
+ 
+ 
+These four patterns (variable tracing, widget binding, scheduled callbacks, and global 
+event binding) show event-driven programming at different levels of the framework. The 
+clipboard method cancels the old scheduled job before creating a new one, which 
+prevents leftover callbacks from clearing the clipboard too early after multiple copies. The 
+inactivity timer only runs while the vault is unlocked, so it does not waste resources on the 
+login screen. 
+Criterion D 
+
+
+===== PAGE 23 =====
+ 
+Criterion E 
+Evaluation of the Product 
+After development was complete, Mark tested the product over one week, using it to store 
+and manage credentials for his real accounts. The following evaluation checks each 
+success criterion from Crtierion A against the final product, using both my own testing and 
+Mark’s feedback. 
+SC1 – Encrypted CRUD:  Met. Mark was able to add, view, edit, and delete entries for all 
+his accounts. All passwords are encrypted with Fernet before being saved to the database, 
+and decrypted only when needed. I confirmed this by opening the SQLite file directly and 
+verifying that the password column contained only ciphertext. Mark said that adding new 
+entries felt simple and that he liked how the password field was hidden by default, since he 
+often has people around when using his laptop. 
+SC2 – Master Password and Lockout: Met. The application requires the master password 
+at every launch. PBKDF2-HMAC-SHA256 with 200,000 iterations and a random 16-byte salt 
+is used for key derivation. After three wrong attempts, the vault locks for 120 seconds. I 
+tested this by entering wrong passwords three times and confirmed the lockout timer 
+
+
+===== PAGE 24 =====
+appeared. Mark said the login felt quick and that knowing the vault locks itself after failed 
+attempts made him feel more confident about leaving the app installed on his computer. 
+SC3 – Strength Analyzer: Met. The custom strength analyzer rates passwords as Weak, 
+Moderate, Strong, or Very Strong based on entropy with penalties for nine weakness 
+patterns. I tested it with common passwords like “password123” (rated Weak), patterns 
+like “abcabcabc” (rated Weak), and randomly generated 20-character passwords (rated 
+Very Strong). The strength bar updates in real time as the user types. Mark told me this was 
+his favorite feature because he could immediately see why his old reused password was 
+rated Weak, and it motivated him to use stronger ones. 
+SC4 – Password Generator: Met. The generator creates random passwords between 8 
+and 64 characters using Python’s secrets module, with toggles for uppercase, lowercase, 
+digits, and symbols. Generated passwords can be copied to the clipboard with one click, 
+and the clipboard clears automatically after 30 seconds. Mark said the generator saved 
+him a lot of time because he no longer had to come up with passwords himself, and he 
+appreciated the automatic clipboard clearing since he did not want passwords sitting in 
+his clipboard by accident. 
+SC5 – Breach Checking: Met. The application checks passwords against the Have I Been 
+Pwned API using k-anonymity, meaning only the first five characters of the SHA-1 hash are 
+sent. Both single-password and vault-wide batch checks work correctly. I tested with 
+known breached passwords and confirmed the breach count was returned accurately. 
+Mark ran the batch check on all his stored entries and was surprised to find that three of 
+his old passwords had appeared in data breaches. He said this was an eye-opener and that 
+he changed those passwords straight away using the generator. 
+SC6 – Search, filter and sort: Met. The dashboard supports real-time search by service 
+name, username, or category, along with a category filter and sorting by service name, 
+category, or date added. With over 20 entries loaded, results appeared instantly. Mark said 
+that finding a specific account was much faster than scrolling through the notes app he 
+used before, and that the category filter was helpful when he wanted to see just his 
+banking accounts. 
+SC7 – Intuitive GUI: Met.  Mark was able to store, retrieve, generate, and breach-check 
+passwords without any help from me. During the usability testing session, I sat next to him 
+and asked him to complete five tasks: add a new entry, edit an existing password, generate 
+a random password, run a breach check, and search for an account. He completed all five 
+on his first try. He said the dark theme was easy on the eyes and the layout was clear. The 
+
+===== PAGE 25 =====
+only issue he mentioned was that the batch breach check button on the dashboard was 
+not obvious at first glance, but once he found it, he had no trouble using it. 
+Future Development of this app 
+Based on my own evaluation and Mark’s feedback, here is how I would improve this app in 
+the future:  
+Password expiry reminders: The product currently has no way to remind the user when a 
+password is old and should be changed. Mark mentioned that he would forget which 
+passwords he had not updated in a long time. Adding a configurable expiry period, for 
+example 90 days, with a visual warning on the dashboard would help. This could be done 
+by comparing the date_modified field to the current date and highlighting entries that are 
+overdue. 
+Data export and backup: Mark said he worried about losing all his passwords if his laptop 
+broke or was stolen. Adding an encrypted export feature that saves the vault to a file would 
+let him back up his data and restore it on a new device. The export file could use the same 
+Fernet encryption already in the system, so no new dependencies would be needed. 
+Suggestions display in the GUI: The backend StrengthAnalyser already generates a list of 
+actionable suggestions, such as “Increase length to at least 12 characters” or “Avoid 
+keyboard paths such as qwerty”, but the GUI currently only shows the rating and entropy 
+value. Displaying these suggestions below the strength bar would give the user clear 
+advice on how to fix a weak password instead of just telling them it is weak. 
+Multi-device access: The product stores data locally in a single SQLite file, so it only works 
+on one computer. Mark said he sometimes needs to log into accounts from his phone and 
+currently has no way to access his stored passwords there. A future version could add 
+optional cloud sync using an encrypted file stored on a service like Google Drive, letting the 
+user access their vault from multiple devices while keeping the data encrypted. 
+Bibliography: 
+CustomTkinter. (n.d.). CustomTkinter documentation. GitHub. 
+https://github.com/TomSchimansky/CustomTkinter 
+Hunt, T. (n.d.). Have I Been Pwned: API v3. Have I Been Pwned. 
+https://haveibeenpwned.com/API/v3 
+Knuth, D. E. (1997). The art of computer programming: Vol. 2. Seminumerical algorithms 
+(3rd ed.). Addison-Wesley. 
+
+===== PAGE 26 =====
+Python Software Foundation. (n.d.). cryptography: Fernet (symmetric encryption). 
+https://cryptography.io/en/latest/fernet/ 
+Python Software Foundation. (n.d.). cryptography: Key derivation functions — PBKDF2. 
+https://cryptography.io/en/latest/hazmat/primitives/key-derivation-functions/#pbkdf2 
+Python Software Foundation. (n.d.). hashlib — Secure hashes and message digests. 
+Python 3 Documentation. https://docs.python.org/3/library/hashlib.html 
+Python Software Foundation. (n.d.). secrets — Generate secure random numbers for 
+managing secrets. Python 3 Documentation. 
+https://docs.python.org/3/library/secrets.html 
+Python Software Foundation. (n.d.). sqlite3 — DB-API 2.0 interface for SQLite databases. 
+Python 3 Documentation. https://docs.python.org/3/library/sqlite3.html 
+Reitz, K. (n.d.). Requests: HTTP for Humans. https://docs.python-requests.org/en/latest/ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
